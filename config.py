@@ -1,0 +1,5 @@
+MYSQL_HOST = 'localhost'
+MYSQL_USER = 'root'
+MYSQL_PASSWORD = 'Ganimani'
+MYSQL_DB = 'expense_tracker'
+SECRET_KEY = 'supersecretkey'

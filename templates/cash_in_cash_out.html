@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cash In / Cash Out</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Cash In / Cash Out</h2>
+        
+        <!-- Display user transactions if they exist -->
+        {% if transactions %}
+            <h3>Your Transactions</h3>
+            <table>
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Credit</th>
+                    <th>Debit</th>
+                    <th>Purpose</th>
+                    <th>Date</th>
+                    <th>Time</th>  <!-- New -->
+                    <th>Account</th>
+                    <th>Transaction Number</th>  <!-- New -->
+                  </tr>
+                </thead>              
+                <tbody>
+                    {% for txn in transactions %}
+                    <tr>
+                      <td>{{ txn.transaction_type }}</td>
+                      <td>{{ txn.amount if txn.transaction_type == 'cash_in' else '-' }}</td>
+                      <td>{{ txn.amount if txn.transaction_type == 'cash_out' else '-' }}</td>
+                      <td>{{ txn.purpose }}</td>
+                      <td>{{ txn.transaction_date }}</td>
+                      <td>{{ txn.transaction_time or '-' }}</td>  <!-- New -->
+                      <td>{{ txn.account_name or '-' }}</td>
+                      <td>{{ txn.transaction_number or '-' }}</td>  <!-- New -->
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+        </table>                              
+        {% else %}
+            <p>No transactions found. Click below to add one!</p>
+        {% endif %}
+        
+        <!-- Add Transaction Button -->
+        <a href="#addTransaction" class="btn">Add Transaction</a>
+
+        <!-- Add Transaction Form -->
+        <div id="addTransaction" style="display:none;">
+            <h3>Add Transaction</h3>
+            <form method="POST">
+                <label for="transaction_type">Transaction Type</label>
+                <select name="transaction_type" required>
+                    <option value="cash_in">Cash In</option>
+                    <option value="cash_out">Cash Out</option>
+                </select>
+                
+                <label for="amount">Amount</label>
+                <input type="number" name="amount" required>
+                
+                <label for="purpose">Purpose</label>
+                <input type="text" name="purpose" required>
+                
+                <label for="transaction_date">Transaction Date (DDMMYYYY)</label>
+                <input type="date" name="transaction_date" required>
+
+                <label for="transaction_time">Transaction Time</label>
+                <input type="time" name="transaction_time" required>
+
+                <label for="transaction_number">Transaction Number (Optional)</label>
+                <input type="text" name="transaction_number">
+
+                <label for="account">Account</label>
+                <input type="text" name="account_name" />
+                
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Show the Add Transaction form when the "Add Transaction" button is clicked
+        document.querySelector('.btn').addEventListener('click', function() {
+            document.getElementById('addTransaction').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
